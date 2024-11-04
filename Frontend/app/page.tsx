@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-// We need to install framer-motion first
-// npm install framer-motion
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Car, 
@@ -12,11 +11,10 @@ import {
   ArrowRight,
   Users,
   BadgeCheck,
-  Sparkles
+  Sparkles,
+  LucideIcon
 } from "lucide-react";
 
-// Import shadcn components - make sure they're installed
-// npx shadcn-ui@latest add button card
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,9 +24,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-// Main page component
-export default function Home() {
-  const features = [
+interface Feature {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+interface Stat {
+  number: string;
+  label: string;
+}
+
+const Home: React.FC = () => {
+  const router = useRouter();
+
+  const features: Feature[] = [
     {
       icon: Shield,
       title: "Comprehensive Coverage",
@@ -46,11 +56,19 @@ export default function Home() {
     }
   ];
 
-  const stats = [
+  const stats: Stat[] = [
     { number: "50K+", label: "Happy Customers" },
     { number: "98%", label: "Claims Settled" },
     { number: "24/7", label: "Support" }
   ];
+
+  const handleGetStarted = () => {
+    router.push('/dashboard/admin');
+  };
+
+  const handleGetQuote = () => {
+    router.push('/dashboard/user');
+  };
 
   return (
     <div className="min-h-screen">
@@ -80,11 +98,19 @@ export default function Home() {
               Customized coverage for every driver.
             </p>
             <div className="flex justify-center gap-4">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+              <Button 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={handleGetStarted}
+              >
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline">
-                Learn More
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={handleGetQuote}
+              >
+                Get Quote
               </Button>
             </div>
           </motion.div>
@@ -165,7 +191,11 @@ export default function Home() {
             <p className="text-xl text-gray-600 mb-8">
               Join thousands of satisfied customers who trust us with their vehicles
             </p>
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              size="lg" 
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={handleGetQuote}
+            >
               Get Your Quote Now
             </Button>
           </motion.div>
@@ -196,4 +226,6 @@ export default function Home() {
       </section>
     </div>
   );
-}
+};
+
+export default Home;
