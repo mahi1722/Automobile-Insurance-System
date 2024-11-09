@@ -28,13 +28,13 @@ interface Claim {
 
 export const UserDashboard: React.FC = () => {
   const policies: Policy[] = [
-    { id: 'POL-001', type: 'Comprehensive', status: 'Active', premium: '$750/year' },
-    { id: 'POL-002', type: 'Third Party', status: 'Pending Renewal', premium: '$400/year' },
+    { id: 'POL-001', type: 'Comprehensive', status: 'Active', premium: 'Rs 750/year' },
+    { id: 'POL-002', type: 'Third Party', status: 'Pending Renewal', premium: 'Rs 400/year' },
   ];
 
   const claims: Claim[] = [
-    { id: 'CLM-001', date: '2024-03-15', status: 'Processing', amount: '$2,500' },
-    { id: 'CLM-002', date: '2024-02-01', status: 'Settled', amount: '$1,800' },
+    { id: 'CLM-001', date: '2024-03-15', status: 'Processing', amount: 'Rs 2,500' },
+    { id: 'CLM-002', date: '2024-02-01', status: 'Settled', amount: 'Rs 1,800' },
   ];
 
   return (
@@ -84,7 +84,7 @@ export const UserDashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">Total Premium</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$1,150</div>
+            <div className="text-2xl font-bold">Rs 1,150</div>
           </CardContent>
         </Card>
       </div>

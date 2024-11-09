@@ -29,8 +29,8 @@ export const AdminDashboard: React.FC = () => {
   ];
 
   const recentClaims: RecentClaim[] = [
-    { id: 'CLM-003', customer: 'Alice Johnson', amount: '$3,200', status: 'Needs Assessment' },
-    { id: 'CLM-004', customer: 'Bob Wilson', amount: '$1,500', status: 'Under Review' },
+    { id: 'CLM-003', customer: 'Alice Johnson', amount: 'Rs 3,200', status: 'Needs Assessment' },
+    { id: 'CLM-004', customer: 'Bob Wilson', amount: 'Rs 1,500', status: 'Under Review' },
   ];
 
   return (
@@ -81,7 +81,7 @@ export const AdminDashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$125,400</div>
+            <div className="text-2xl font-bold">Rs 125,400</div>
             <div className="text-sm text-green-600">+5% from last month</div>
           </CardContent>
         </Card>
