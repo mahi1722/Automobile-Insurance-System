@@ -12,16 +12,39 @@ import PrivacyPolicy from './pages/PrivacyPolicyPage';
 import TermsOfService from './pages/TermsOfServicePage';
 import CookiePolicy from './pages/CookiePolicyPage';
 
+// Import User and Admin Dashboards
+import UserDash from './pages/UserDash';
+import AdminDash from './pages/AdminDash';
+
 // Navbar and Footer
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 
 // Simulated authentication context (you'll want to replace this with actual auth management)
 const PrivateRoute = ({ children }) => {
-  // TODO: Replace with actual authentication check
-  const isAuthenticated = false; // This would come from your auth context/state
+  // Get token and role from localStorage
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
 
-  return isAuthenticated ? children : <Navigate to="/auth" replace />;
+  // Check if token exists and role matches
+  if (!token) {
+    return <Navigate to="/auth" replace />;
+  }
+
+  // Conditional routing based on role
+  if (role === 'ROLE_ADMIN' && children.type.name === 'AdminDash') {
+    return children;
+  }
+
+  if (role === 'ROLE_CUSTOMER' && children.type.name === 'UserDash') {
+    return children;
+  }
+
+  // If roles don't match, redirect to appropriate dashboard
+  return <Navigate 
+    to={role === 'ROLE_ADMIN' ? '/admin-dashboard' : '/customer-dashboard'} 
+    replace 
+  />;
 };
 
 // Simple Not Found Page
@@ -64,16 +87,23 @@ function App() {
             <Route path="/login" element={<Auth />} />
             <Route path="/signup" element={<Auth />} />
 
-            {/* Protected Routes (example) */}
-            {/* Uncomment and implement as you add more protected pages */}
-            {/* <Route 
-              path="/dashboard" 
+            {/* Protected Routes */}
+            <Route 
+              path="/customer-dashboard" 
               element={
                 <PrivateRoute>
-                  <Dashboard />
+                  <UserDash />
                 </PrivateRoute>
               } 
-            /> */}
+            />
+            <Route 
+              path="/admin-dashboard" 
+              element={
+                <PrivateRoute>
+                  <AdminDash />
+                </PrivateRoute>
+              } 
+            />
 
             {/* 404 Not Found Route */}
             <Route path="*" element={<NotFound />} />

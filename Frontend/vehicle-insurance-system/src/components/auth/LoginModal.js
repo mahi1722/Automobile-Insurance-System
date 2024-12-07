@@ -1,14 +1,36 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import authService from '../../service/api';  // Assuming api.js is in the same directory
 
 const LoginModal = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: Implement actual login logic
-    console.log('Login attempt:', { email, password });
+    try {
+      const { role } = await authService.signIn({ email, password }, navigate);
+      
+      console.log('Logged in with role:', role);
+      
+      // Simplified navigation logic
+      switch(role) {
+        case 'ROLE_ADMIN':
+          navigate('/admin-dashboard');
+          break;
+        case 'ROLE_CUSTOMER':
+          navigate('/customer-dashboard');
+          break;
+        default:
+          console.error('Unknown role:', role);
+          navigate('/');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(error.message || 'Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -56,9 +78,9 @@ const LoginModal = () => {
         </div>
 
         <div className="text-sm">
-          <Link to="/forgot-password" className="font-medium text-primary-600 hover:text-primary-500">
+          <a href="/forgot-password" className="font-medium text-primary-600 hover:text-primary-500">
             Forgot your password?
-          </Link>
+          </a>
         </div>
       </div>
 

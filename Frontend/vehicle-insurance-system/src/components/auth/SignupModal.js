@@ -1,63 +1,46 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import authService from '../../service/api';  
 
 const SignupModal = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value
     }));
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    // TODO: Implement actual signup logic
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-    console.log('Signup attempt:', formData);
+    await authService.signUp(formData, navigate);
   };
 
   return (
     <form onSubmit={handleSignup} className="mt-8 space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="firstName" className="sr-only">First Name</label>
-          <input
-            id="firstName"
-            name="firstName"
-            type="text"
-            required
-            value={formData.firstName}
-            onChange={handleChange}
-            className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-            placeholder="First Name"
-          />
-        </div>
-        <div>
-          <label htmlFor="lastName" className="sr-only">Last Name</label>
-          <input
-            id="lastName"
-            name="lastName"
-            type="text"
-            required
-            value={formData.lastName}
-            onChange={handleChange}
-            className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-            placeholder="Last Name"
-          />
-        </div>
+      {/* Name Field */}
+      <div>
+        <label htmlFor="name" className="sr-only">Name</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          value={formData.name}
+          onChange={handleChange}
+          className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+          placeholder="Name"
+        />
       </div>
-      
+
+      {/* Email Field */}
       <div>
         <label htmlFor="email" className="sr-only">Email address</label>
         <input
@@ -71,7 +54,8 @@ const SignupModal = () => {
           placeholder="Email address"
         />
       </div>
-      
+
+      {/* Password Field */}
       <div>
         <label htmlFor="password" className="sr-only">Password</label>
         <input
@@ -85,21 +69,8 @@ const SignupModal = () => {
           placeholder="Password"
         />
       </div>
-      
-      <div>
-        <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          required
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-          placeholder="Confirm Password"
-        />
-      </div>
 
+      {/* Submit Button */}
       <div>
         <button
           type="submit"
