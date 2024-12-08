@@ -16,12 +16,39 @@ const NewPolicy = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Replace this with an API call to submit the policy details
-    console.log('Policy Details Submitted:', formData);
-    setQuoteSubmitted(true);
-    setTimeout(() => setQuoteSubmitted(false), 3000); // Reset after 3 seconds
+  
+    try {
+      const response = await fetch("http://localhost:8080/api/policy/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Policy Created:", data);
+        setQuoteSubmitted(true);
+        setTimeout(() => setQuoteSubmitted(false), 3000); // Reset after 3 seconds
+      } else {
+        // Handle errors with a fallback for empty response bodies
+        const errorText = await response.text();
+        try {
+          const errorData = JSON.parse(errorText);
+          console.error("Error:", errorData);
+          alert(errorData.message || "Failed to submit policy. Please try again.");
+        } catch (e) {
+          console.error("Error:", errorText);
+          alert("An unexpected error occurred. Please try again.");
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while submitting the policy.");
+    }
   };
 
   return (
