@@ -1,30 +1,33 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { X } from 'lucide-react';
 
 const FileClaim = () => {
   const [formData, setFormData] = useState({
     claimNumber: '',
     description: '',
-    status: 'Pending',
+    claimAmount: '',
   });
-  const [claimSubmitted, setClaimSubmitted] = useState(false);
-  const [message, setMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8080/api/claims', formData);
-      setMessage('Claim has been filed successfully!');
-      setClaimSubmitted(true);
-    } catch (error) {
-      setMessage('Error filing claim: ' + error.message);
-      console.error('Error submitting claim:', error);
-    }
+    // Open modal on successful submission
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    // Reset form after closing modal
+    setFormData({
+      claimNumber: '',
+      description: '',
+      claimAmount: '',
+    });
   };
 
   return (
@@ -59,18 +62,17 @@ const FileClaim = () => {
         </div>
 
         <div>
-          <label className="block font-semibold">Status</label>
-          <select
-            name="status"
-            value={formData.status}
+          <label className="block font-semibold">Claim Amount (₹)</label>
+          <input
+            type="number"
+            name="claimAmount"
+            value={formData.claimAmount}
             onChange={handleInputChange}
             className="border px-4 py-2 rounded w-full"
+            min="0"
+            step="0.01"
             required
-          >
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </select>
+          />
         </div>
 
         <button
@@ -81,9 +83,31 @@ const FileClaim = () => {
         </button>
       </form>
 
-      {claimSubmitted && (
-        <div className="mt-4 bg-green-100 text-green-700 p-4 rounded">
-          {message}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full relative">
+            <button 
+              onClick={closeModal} 
+              className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+            >
+              <X size={24} />
+            </button>
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-green-600 mb-4">Claim Filed Successfully!</h2>
+              <p className="mb-4">Your claim has been submitted with the following details:</p>
+              <div className="bg-gray-100 p-4 rounded-md text-left">
+                <p><strong>Claim Number:</strong> {formData.claimNumber}</p>
+                <p><strong>Description:</strong> {formData.description}</p>
+                <p><strong>Claim Amount:</strong> ₹{parseFloat(formData.claimAmount).toFixed(2)}</p>
+              </div>
+              <button 
+                onClick={closeModal}
+                className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

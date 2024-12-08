@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const mockClaims = [
   { id: 1, user: 'John Doe', policy: 'Comprehensive Cover', status: 'INITIATED' },
-  { id: 2, user: 'Jane Smith', policy: 'Third-Party Liability', status: 'UNDER_REVIEW' },
+  { id: 2, user: 'Jane Smith', policy: 'Third-Party Liability', status: 'INITIATED' },
   { id: 3, user: 'Mark Lee', policy: 'Own Damage Cover', status: 'APPROVED' },
 ];
 

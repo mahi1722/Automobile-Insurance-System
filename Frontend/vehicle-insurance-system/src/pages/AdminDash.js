@@ -6,7 +6,7 @@ const AdminDash = () => {
     totalUsers: 250,
     totalPolicies: 500,
     activePolicies: 350,
-    pendingClaims: 15,
+    pendingClaims: 2,
     totalRevenue: 5000000,
   };
 

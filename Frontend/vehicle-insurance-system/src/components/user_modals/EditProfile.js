@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from 'react';
-
-// Mock user data (to be replaced with data fetched from the backend)
-const mockUserData = {
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  dob: '1990-01-01',
-  aadhar: '1234-5678-9101',
-  pan: 'ABCDE1234F',
-};
+import axios from 'axios';
 
 const EditProfile = () => {
   const [formData, setFormData] = useState({
+    user_id: '',
     name: '',
-    email: '',
+    email: 'john.doe@example.com', // Default email for fetching profile
+    address: '',
     dob: '',
-    aadhar: '',
-    pan: '',
+    aadhar_no: '',
+    pan_no: '',
   });
   const [profileUpdated, setProfileUpdated] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Load user data (simulate fetch)
+  // Load user data from backend
   useEffect(() => {
-    // Simulate API call to fetch user details
-    setFormData(mockUserData);
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/user/profile?email=${formData.email}`);
+        setFormData(response.data);
+      } catch (err) {
+        setError('Failed to fetch user profile');
+        console.error('Error fetching profile:', err);
+      }
+    };
+
+    fetchUserProfile();
   }, []);
 
   const handleInputChange = (e) => {
@@ -30,17 +34,29 @@ const EditProfile = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Replace this with an API call to update user profile
-    console.log('Profile Updated:', formData);
-    setProfileUpdated(true);
-    setTimeout(() => setProfileUpdated(false), 3000); // Reset after 3 seconds
+    try {
+      const response = await axios.put('http://localhost:8080/api/user/profile', formData);
+      setFormData(response.data);
+      setProfileUpdated(true);
+      setError(null);
+      setTimeout(() => setProfileUpdated(false), 3000);
+    } catch (err) {
+      setError('Failed to update profile');
+      console.error('Error updating profile:', err);
+      setProfileUpdated(false);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Edit Profile</h1>
+      {error && (
+        <div className="mb-4 bg-red-100 text-red-700 p-4 rounded">
+          {error}
+        </div>
+      )}
       <form
         className="bg-white p-6 rounded-lg shadow-lg space-y-4"
         onSubmit={handleSubmit}
@@ -58,13 +74,25 @@ const EditProfile = () => {
           />
         </div>
 
-        {/* Email */}
+        {/* Email (read-only) */}
         <div>
           <label className="block font-semibold">Email</label>
           <input
             type="email"
             name="email"
             value={formData.email}
+            readOnly
+            className="border px-4 py-2 rounded w-full bg-gray-100"
+          />
+        </div>
+
+        {/* Address */}
+        <div>
+          <label className="block font-semibold">Address</label>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
             onChange={handleInputChange}
             className="border px-4 py-2 rounded w-full"
             required
@@ -76,8 +104,8 @@ const EditProfile = () => {
           <label className="block font-semibold">Date of Birth</label>
           <input
             type="date"
-            name="dob"
-            value={formData.dob}
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
             onChange={handleInputChange}
             className="border px-4 py-2 rounded w-full"
             required
@@ -89,8 +117,8 @@ const EditProfile = () => {
           <label className="block font-semibold">Aadhar Number</label>
           <input
             type="text"
-            name="aadhar"
-            value={formData.aadhar}
+            name="aadharNo"
+            value={formData.aadharNo}
             onChange={handleInputChange}
             className="border px-4 py-2 rounded w-full"
             required
@@ -102,8 +130,8 @@ const EditProfile = () => {
           <label className="block font-semibold">PAN Number</label>
           <input
             type="text"
-            name="pan"
-            value={formData.pan}
+            name="panNo"
+            value={formData.panNo}
             onChange={handleInputChange}
             className="border px-4 py-2 rounded w-full"
             required

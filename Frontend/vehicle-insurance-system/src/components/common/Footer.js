@@ -19,7 +19,7 @@ const Footer = () => {
 
   const contactInfo = {
     phone: '(800) 123-4567',
-    email: 'support@vehicleinsurance.com',
+    email: 'aaravsrivastava004@gmail.com',
     address: '123 Insurance Street, Business District, BD 12345'
   };
 
@@ -29,7 +29,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           {/* Company Logo and Description */}
           <div>
-            <h3 className="text-2xl font-bold mb-4">Vehicle Insurance</h3>
+            <h3 className="text-2xl font-bold mb-4">AutoInsure</h3>
             <p className="text-neutral-300 text-sm">
               Providing comprehensive and reliable vehicle insurance solutions that protect what matters most to you.
             </p>
@@ -97,7 +97,7 @@ const Footer = () => {
         {/* Copyright Section */}
         <div className="mt-12 pt-8 border-t border-neutral-800 text-center">
           <p className="text-neutral-400">
-            © {currentYear} Vehicle Insurance. All Rights Reserved.
+            © {currentYear} Auto Insure. All Rights Reserved.
           </p>
         </div>
       </div>
